@@ -38,9 +38,17 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button size="sm" className="hidden sm:inline-flex gap-2">
-            <Download className="h-4 w-4" /> Resume
+          <a
+          href=".public/resume/UsamaAhmed_Resume.pdf"
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden sm:inline-flex"
+          >
+          <Button size="sm" className="gap-2">
+          <Download className="h-4 w-4" /> Resume
           </Button>
+          </a>
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -61,9 +69,17 @@ export function Navbar() {
                     {l.label}
                   </a>
                 ))}
-                <Button className="mt-4 gap-2">
+                <a
+                  href=".public/resume/UsamaAhmed_Resume.pdf"
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:inline-flex"
+                  >
+                  <Button size="sm" className="gap-2">
                   <Download className="h-4 w-4" /> Resume
-                </Button>
+                  </Button>
+                  </a>
               </div>
             </SheetContent>
           </Sheet>
