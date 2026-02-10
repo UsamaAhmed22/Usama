@@ -39,7 +39,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <a
-          href="./UsamaAhmed_Resume.pdf"
+          href="/resume/UsamaAhmed_Resume.pdf"
           download
           target="_blank"
           rel="noopener noreferrer"
@@ -70,7 +70,7 @@ export function Navbar() {
                   </a>
                 ))}
                 <a
-                  href="./UsamaAhmed_Resume.pdf"
+                  href="/resume/UsamaAhmed_Resume.pdf"
                   download
                   target="_blank"
                   rel="noopener noreferrer"
