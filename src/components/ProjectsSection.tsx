@@ -1,7 +1,6 @@
 import { ExternalLink, Github } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 
 const projects = [
   {
@@ -26,41 +25,42 @@ const projects = [
 
 export function ProjectsSection() {
   return (
-    <section id="projects" className="py-20 px-4">
+    <section id="projects" className="py-24 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="animate-on-scroll mb-12 text-center">
-          <p className="mb-2 font-mono text-sm font-medium uppercase tracking-widest text-primary">Projects</p>
-          <h2 className="text-3xl font-bold sm:text-4xl">Featured Work</h2>
+        <div className="animate-on-scroll mb-14 text-center">
+          <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-primary">Projects</p>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Featured Work</h2>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {projects.map((p) => (
-            <Card
+            <div
               key={p.title}
-              className="animate-on-scroll flex flex-col border-border/50 bg-card/80 backdrop-blur transition-all hover:glow hover:-translate-y-1"
+              className="animate-on-scroll group flex flex-col rounded-2xl glass p-6 transition-all duration-300 hover:glow hover:-translate-y-1"
             >
-              <CardHeader>
-                <CardTitle className="text-lg leading-snug">{p.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{p.description}</p>
+              <h3 className="text-base font-semibold leading-snug mb-3">{p.title}</h3>
+              <p className="mb-5 text-[13px] leading-relaxed text-muted-foreground flex-1">{p.description}</p>
+              
+              <div className="mb-5">
+                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70 mb-2">Tools Used</p>
                 <div className="flex flex-wrap gap-1.5">
                   {p.tools.map((t) => (
-                    <Badge key={t} variant="secondary" className="text-xs font-mono">
+                    <Badge key={t} variant="secondary" className="text-[11px] font-mono rounded-lg border-0 px-2 py-0.5">
                       {t}
                     </Badge>
                   ))}
                 </div>
-              </CardContent>
-              <CardFooter className="gap-2">
-                <Button size="sm" variant="outline" className="gap-1.5">
+              </div>
+
+              <div className="flex gap-2 pt-1">
+                <Button size="sm" variant="outline" className="gap-1.5 rounded-xl text-xs">
                   <Github className="h-3.5 w-3.5" /> GitHub
                 </Button>
-                <Button size="sm" variant="ghost" className="gap-1.5">
+                <Button size="sm" variant="ghost" className="gap-1.5 text-xs">
                   <ExternalLink className="h-3.5 w-3.5" /> Case Study
                 </Button>
-              </CardFooter>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       </div>

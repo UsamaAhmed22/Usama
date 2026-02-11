@@ -3,19 +3,19 @@ import { Button } from './ui/button';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 py-8 px-4">
+    <footer className="border-t border-border/30 py-8 px-4">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           © 2026 Usama Ahmed — DevOps Engineer Portfolio
         </p>
 
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl" asChild>
             <a href="https://www.linkedin.com/in/usamaahmed30" target="_blank" rel="noopener noreferrer">
               <Linkedin className="h-4 w-4" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl" asChild>
             <a href="https://github.com/UsamaAhmed22" target="_blank" rel="noopener noreferrer">
               <Github className="h-4 w-4" />
             </a>
@@ -23,11 +23,10 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Back to Top */}
       <Button
         variant="outline"
         size="icon"
-        className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg"
+        className="fixed bottom-6 right-6 z-50 h-10 w-10 rounded-full shadow-lg glass"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         <ArrowUp className="h-4 w-4" />

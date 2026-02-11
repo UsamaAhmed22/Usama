@@ -9,27 +9,27 @@ const responsibilities = [
 
 export function ExperienceSection() {
   return (
-    <section id="experience" className="py-20 px-4 bg-muted/30">
-      <div className="mx-auto max-w-4xl">
-        <div className="animate-on-scroll mb-12 text-center">
-          <p className="mb-2 font-mono text-sm font-medium uppercase tracking-widest text-primary">Experience</p>
-          <h2 className="text-3xl font-bold sm:text-4xl">Work History</h2>
+    <section id="experience" className="py-24 px-4 bg-muted/20">
+      <div className="mx-auto max-w-3xl">
+        <div className="animate-on-scroll mb-14 text-center">
+          <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-primary">Experience</p>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Work History</h2>
         </div>
 
-        <div className="animate-on-scroll relative border-l-2 border-primary/30 pl-8">
-          <div className="absolute -left-3 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
+        <div className="animate-on-scroll relative border-l border-primary/20 pl-8 ml-3">
+          <div className="absolute -left-[13px] top-0 flex h-[26px] w-[26px] items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20">
             <Briefcase className="h-3 w-3" />
           </div>
 
-          <div>
-            <h3 className="text-xl font-semibold">DevOps Intern</h3>
-            <p className="mb-1 font-mono text-sm text-primary">Beenco Lab — Karachi</p>
-            <p className="mb-4 text-sm text-muted-foreground">Dec 2025 – Present</p>
+          <div className="rounded-2xl glass p-6 sm:p-8">
+            <h3 className="text-lg font-semibold">DevOps Intern</h3>
+            <p className="mb-1 text-sm font-medium text-primary">Beenco Lab — Karachi</p>
+            <p className="mb-5 text-xs text-muted-foreground">Dec 2025 – Present</p>
 
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {responsibilities.map((r) => (
-                <li key={r} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                <li key={r} className="flex items-start gap-3 text-[13px] leading-relaxed text-muted-foreground">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />
                   {r}
                 </li>
               ))}
