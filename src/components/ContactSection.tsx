@@ -4,24 +4,48 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import emailjs from 'emailjs-com';
 
 export function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      toast({ title: 'Please fill in all fields', variant: 'destructive' });
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      toast({ title: 'Please enter a valid email', variant: 'destructive' });
-      return;
-    }
-    toast({ title: 'Message sent!', description: 'Thank you for reaching out.' });
-    setForm({ name: '', email: '', message: '' });
+  e.preventDefault();
+  if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+    toast({ title: 'Please fill in all fields', variant: 'destructive' });
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    toast({ title: 'Please enter a valid email', variant: 'destructive' });
+    return;
+  }
+
+  // Setting up template parameters for EmailJS
+  const templateParams = {
+    from_name: form.name,
+    from_email: form.email,
+    message: form.message,
   };
+
+  // Sending the email using EmailJS
+  emailjs
+    .send(
+      'service_2dq881s',   // Your service ID from EmailJS
+      'template_ky9a1lh',   // Your template ID from EmailJS
+      templateParams,
+      'bIBGwUW9lGQXPmbcn'   // Your user ID from EmailJS
+    )
+    .then(
+      (response) => {
+        toast({ title: 'Message sent!', description: 'Thank you for reaching out.' });
+        setForm({ name: '', email: '', message: '' });
+      },
+      (err) => {
+        toast({ title: 'Something went wrong, please try again.', variant: 'destructive' });
+      }
+    );
+};
 
   const contactItems = [
     { icon: Mail, label: 'Email', value: 'usamaahmed30@yahoo.com', href: 'mailto:usamaahmed30@yahoo.com' },
