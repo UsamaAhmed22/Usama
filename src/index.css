@@ -6,26 +6,27 @@
 
 @layer base {
   :root {
-    --background: 210 25% 97%;
-    --foreground: 220 30% 10%;
+    --background: 220 20% 96%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 220 30% 10%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 10%;
+    --popover-foreground: 222 47% 11%;
     --primary: 210 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 93%;
-    --secondary-foreground: 220 30% 15%;
-    --muted: 210 20% 94%;
-    --muted-foreground: 215 15% 45%;
-    --accent: 185 70% 45%;
+    --secondary: 214 20% 93%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 192 70% 45%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 89%;
+    --input: 220 13% 89%;
     --ring: 210 100% 50%;
     --radius: 0.75rem;
+    --container-bg: 0 0% 100%;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -37,32 +38,33 @@
   }
 
   .dark {
-    --background: 222 47% 5%;
-    --foreground: 210 30% 92%;
-    --card: 222 40% 8%;
-    --card-foreground: 210 30% 92%;
-    --popover: 222 40% 8%;
-    --popover-foreground: 210 30% 92%;
+    --background: 225 30% 6%;
+    --foreground: 210 40% 93%;
+    --card: 224 30% 10%;
+    --card-foreground: 210 40% 93%;
+    --popover: 224 30% 10%;
+    --popover-foreground: 210 40% 93%;
     --primary: 200 95% 55%;
-    --primary-foreground: 220 50% 5%;
-    --secondary: 220 30% 12%;
+    --primary-foreground: 222 47% 5%;
+    --secondary: 222 25% 14%;
     --secondary-foreground: 210 30% 85%;
-    --muted: 220 25% 11%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 223 20% 13%;
+    --muted-foreground: 218 15% 55%;
     --accent: 185 70% 50%;
-    --accent-foreground: 220 50% 5%;
+    --accent-foreground: 222 47% 5%;
     --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 220 25% 14%;
-    --input: 220 25% 14%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 223 20% 16%;
+    --input: 223 20% 16%;
     --ring: 200 95% 55%;
-    --sidebar-background: 222 47% 5%;
+    --container-bg: 224 30% 9%;
+    --sidebar-background: 225 30% 6%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 200 95% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 11%;
+    --sidebar-accent: 222 25% 14%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 220 25% 14%;
+    --sidebar-border: 223 20% 16%;
     --sidebar-ring: 200 95% 55%;
   }
 }
@@ -86,8 +88,8 @@
 @layer utilities {
   .animate-on-scroll {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .animate-on-scroll.visible {
     opacity: 1;
@@ -95,19 +97,26 @@
   }
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(200 95% 55%), hsl(185 70% 50%));
+    background-image: linear-gradient(135deg, hsl(210 100% 55%), hsl(185 70% 50%));
   }
   .glow {
-    box-shadow: 0 0 50px -12px hsl(200 95% 55% / 0.2);
+    box-shadow: 0 0 40px -10px hsl(200 95% 55% / 0.15);
   }
   .glass {
-    background: hsl(var(--card) / 0.6);
-    backdrop-filter: blur(20px);
+    background: hsl(var(--card) / 0.65);
+    backdrop-filter: blur(16px);
     border: 1px solid hsl(var(--border) / 0.5);
   }
   .glass-strong {
-    background: hsl(var(--card) / 0.8);
-    backdrop-filter: blur(24px);
+    background: hsl(var(--card) / 0.85);
+    backdrop-filter: blur(20px);
     border: 1px solid hsl(var(--border) / 0.4);
+  }
+  .container-shell {
+    background: hsl(var(--container-bg));
+    box-shadow: 0 0 0 1px hsl(var(--border) / 0.5), 0 25px 80px -20px hsl(220 50% 10% / 0.15);
+  }
+  .dark .container-shell {
+    box-shadow: 0 0 0 1px hsl(var(--border) / 0.3), 0 25px 80px -20px hsl(220 80% 5% / 0.5);
   }
 }

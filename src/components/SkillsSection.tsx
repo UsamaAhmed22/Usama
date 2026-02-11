@@ -18,23 +18,23 @@ const skills = [
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="py-24 px-4 bg-muted/20">
+    <section id="skills" className="py-24 px-5 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="animate-on-scroll mb-14 text-center">
-          <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-primary">Skills</p>
-          <h2 className="text-3xl font-semibold sm:text-4xl">Technical Expertise</h2>
+          <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Skills</p>
+          <h2 className="text-2xl font-semibold sm:text-3xl">Technical Expertise</h2>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((s, i) => (
             <div
               key={s.title}
-              className="animate-on-scroll group rounded-2xl glass p-5 transition-all duration-300 hover:glow hover:-translate-y-1"
-              style={{ transitionDelay: `${i * 40}ms` }}
+              className="animate-on-scroll group rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
+              style={{ transitionDelay: `${i * 30}ms` }}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                  <s.icon className="h-4.5 w-4.5" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/8 text-primary">
+                  <s.icon className="h-4 w-4" />
                 </div>
                 <h3 className="text-sm font-semibold">{s.title}</h3>
               </div>
@@ -42,7 +42,7 @@ export function SkillsSection() {
                 {s.items.map((item) => (
                   <span
                     key={item}
-                    className="rounded-lg bg-muted/80 px-2.5 py-1 text-xs text-muted-foreground font-mono"
+                    className="rounded-lg bg-muted/70 px-2.5 py-1 text-[11px] text-muted-foreground font-mono"
                   >
                     {item}
                   </span>
