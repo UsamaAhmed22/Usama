@@ -12,7 +12,7 @@ export function useScrollAnimation() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '0px 0px -30px 0px' }
     );
 
     const el = ref.current;
