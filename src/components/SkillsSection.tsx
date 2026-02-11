@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import {
   GitBranch, Box, Ship, RefreshCw, Cloud, Shield, CheckCircle,
   Terminal, Wrench, Users,
@@ -19,41 +18,37 @@ const skills = [
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="py-20 px-4 bg-muted/30">
+    <section id="skills" className="py-24 px-4 bg-muted/20">
       <div className="mx-auto max-w-6xl">
-        <div className="animate-on-scroll mb-12 text-center">
-          <p className="mb-2 font-mono text-sm font-medium uppercase tracking-widest text-primary">Skills</p>
-          <h2 className="text-3xl font-bold sm:text-4xl">Technical Expertise</h2>
+        <div className="animate-on-scroll mb-14 text-center">
+          <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-primary">Skills</p>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Technical Expertise</h2>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((s, i) => (
-            <Card
+            <div
               key={s.title}
-              className="animate-on-scroll border-border/50 bg-card/80 backdrop-blur transition-all hover:glow hover:-translate-y-1"
-              style={{ transitionDelay: `${i * 50}ms` }}
+              className="animate-on-scroll group rounded-2xl glass p-5 transition-all duration-300 hover:glow hover:-translate-y-1"
+              style={{ transitionDelay: `${i * 40}ms` }}
             >
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3 text-base">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <s.icon className="h-5 w-5" />
-                  </div>
-                  {s.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="flex flex-wrap gap-1.5">
-                  {s.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground font-mono"
-                    >
-                      {item}
-                    </span>
-                  ))}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                  <s.icon className="h-4.5 w-4.5" />
                 </div>
-              </CardContent>
-            </Card>
+                <h3 className="text-sm font-semibold">{s.title}</h3>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {s.items.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg bg-muted/80 px-2.5 py-1 text-xs text-muted-foreground font-mono"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>

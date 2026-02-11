@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, Download } from 'lucide-react';
 import { Button } from './ui/button';
 import { ThemeToggle } from './ThemeToggle';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
@@ -18,53 +18,53 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#home" className="font-mono text-lg font-bold tracking-tight text-gradient">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-strong">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <a href="#home" className="text-base font-semibold tracking-tight text-gradient">
           USAMA AHMED
         </a>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-0.5 md:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50"
             >
               {l.label}
             </a>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <ThemeToggle />
           <a
-          href="/resume/UsamaAhmed_Resume.pdf"
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:inline-flex"
+            href="/resume/UsamaAhmed_Resume.pdf"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex"
           >
-          <Button size="sm" className="gap-2">
-          <Download className="h-4 w-4" /> Resume
-          </Button>
+            <Button size="sm" className="gap-1.5 rounded-xl text-xs font-medium shadow-sm">
+              <Download className="h-3.5 w-3.5" /> Resume
+            </Button>
           </a>
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="md:hidden h-9 w-9">
+                <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
+            <SheetContent side="right" className="w-72 glass-strong">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <div className="mt-8 flex flex-col gap-2">
+              <div className="mt-8 flex flex-col gap-1">
                 {links.map((l) => (
                   <a
                     key={l.href}
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="rounded-lg px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted"
+                    className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
                   >
                     {l.label}
                   </a>
@@ -74,12 +74,12 @@ export function Navbar() {
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hidden sm:inline-flex"
-                  >
-                  <Button size="sm" className="gap-2">
-                  <Download className="h-4 w-4" /> Resume
+                  className="mt-2"
+                >
+                  <Button size="sm" className="w-full gap-2 rounded-xl">
+                    <Download className="h-4 w-4" /> Download Resume
                   </Button>
-                  </a>
+                </a>
               </div>
             </SheetContent>
           </Sheet>
