@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, MapPin, Linkedin, Github, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -28,12 +29,7 @@ export function ContactSection() {
     };
 
     emailjs
-      .send(
-        'service_2dq881s',
-        'template_ky9a1lh',
-        templateParams,
-        'bIBGwUW9lGQXPmbcn'
-      )
+      .send('service_2dq881s', 'template_ky9a1lh', templateParams, 'bIBGwUW9lGQXPmbcn')
       .then(
         () => {
           toast({ title: 'Message sent!', description: 'Thank you for reaching out.' });
@@ -53,40 +49,65 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="py-24 px-5 sm:px-8">
+    <section id="contact" className="py-24 px-6">
       <div className="mx-auto max-w-4xl">
-        <div className="animate-on-scroll mb-14 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5 }}
+          className="mb-14 text-center"
+        >
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Contact</p>
           <h2 className="text-2xl font-semibold sm:text-3xl">Get In Touch</h2>
-        </div>
+        </motion.div>
 
         <div className="grid gap-8 md:grid-cols-2">
-          <div className="animate-on-scroll space-y-5">
-            {contactItems.map((item) => (
-              <div key={item.label} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/8 text-primary">
-                  <item.icon className="h-4 w-4" />
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="space-y-5"
+          >
+            {contactItems.map((ci, i) => (
+              <motion.div
+                key={ci.label}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.15 + i * 0.08 }}
+                className="flex items-center gap-3"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <ci.icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{item.label}</p>
-                  {item.href ? (
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{ci.label}</p>
+                  {ci.href ? (
                     <a
-                      href={item.href}
-                      target={item.href.startsWith('http') ? '_blank' : undefined}
-                      rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="text-sm font-medium hover:text-primary transition-colors"
+                      href={ci.href}
+                      target={ci.href.startsWith('http') ? '_blank' : undefined}
+                      rel={ci.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="text-sm font-medium hover:text-primary transition-colors duration-200"
                     >
-                      {item.value}
+                      {ci.value}
                     </a>
                   ) : (
-                    <p className="text-sm font-medium">{item.value}</p>
+                    <p className="text-sm font-medium">{ci.value}</p>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="animate-on-scroll rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="rounded-2xl border border-border/50 bg-card p-6"
+          >
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 placeholder="Your Name"
@@ -111,11 +132,11 @@ export function ContactSection() {
                 maxLength={1000}
                 className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40 resize-none"
               />
-              <Button type="submit" className="w-full gap-2 rounded-xl shadow-md shadow-primary/15 font-medium">
+              <Button type="submit" className="w-full gap-2 rounded-xl font-medium">
                 <Send className="h-4 w-4" /> Send Message
               </Button>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

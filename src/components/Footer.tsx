@@ -1,12 +1,19 @@
 import { ArrowUp, Github, Linkedin } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/30 py-8 px-5 sm:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
+    <motion.footer
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="border-t border-border/30 py-8 px-6"
+    >
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
         <p className="text-xs text-muted-foreground">
-          © 2026 Usama Ahmed — DevOps Engineer Portfolio
+          © 2026 Usama Ahmed — DevOps Engineer
         </p>
 
         <div className="flex items-center gap-1">
@@ -31,6 +38,6 @@ export function Footer() {
       >
         <ArrowUp className="h-4 w-4" />
       </Button>
-    </footer>
+    </motion.footer>
   );
 }

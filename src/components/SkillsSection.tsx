@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import {
   GitBranch, Box, Ship, RefreshCw, Cloud, Shield, CheckCircle,
   Terminal, Wrench, Users,
@@ -16,41 +17,64 @@ const skills = [
   { icon: Users, title: 'Processes', items: ['Agile / Scrum', 'Documentation'] },
 ];
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
 export function SkillsSection() {
   return (
-    <section id="skills" className="py-24 px-5 sm:px-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="animate-on-scroll mb-14 text-center">
+    <section id="skills" className="py-24 px-6">
+      <div className="mx-auto max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5 }}
+          className="mb-14 text-center"
+        >
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Skills</p>
           <h2 className="text-2xl font-semibold sm:text-3xl">Technical Expertise</h2>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((s, i) => (
-            <div
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-40px' }}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {skills.map((s) => (
+            <motion.div
               key={s.title}
-              className="animate-on-scroll group rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
-              style={{ transitionDelay: `${i * 30}ms` }}
+              variants={item}
+              whileHover={{ y: -3, transition: { duration: 0.2 } }}
+              className="group rounded-2xl border border-border/50 bg-card p-5 transition-shadow duration-300 hover:shadow-md hover:shadow-primary/5"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/8 text-primary">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <s.icon className="h-4 w-4" />
                 </div>
                 <h3 className="text-sm font-semibold">{s.title}</h3>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {s.items.map((item) => (
+                {s.items.map((it) => (
                   <span
-                    key={item}
-                    className="rounded-lg bg-muted/70 px-2.5 py-1 text-[11px] text-muted-foreground font-mono"
+                    key={it}
+                    className="rounded-lg bg-muted px-2.5 py-1 text-[11px] text-muted-foreground font-mono"
                   >
-                    {item}
+                    {it}
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

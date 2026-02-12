@@ -1,4 +1,5 @@
-import { ArrowDown, Mail, GitBranch, Box, Ship, Cloud, Shield } from 'lucide-react';
+import { ArrowDown, Mail } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
@@ -6,63 +7,55 @@ const badges = ['Jenkins', 'Docker', 'Kubernetes', 'GitOps', 'AWS', 'Azure', 'Li
 
 export function HeroSection() {
   return (
-    <section id="home" className="relative flex min-h-[85vh] items-center overflow-hidden px-5 pt-14 sm:px-8">
-      {/* Wave/flow graphic */}
-      <div className="pointer-events-none absolute inset-0">
-        <svg className="absolute right-0 top-0 h-full w-1/2 opacity-[0.04]" viewBox="0 0 600 800" fill="none">
-          <path d="M100,0 Q300,200 200,400 T300,800" stroke="hsl(200,95%,55%)" strokeWidth="2" fill="none"/>
-          <path d="M200,0 Q400,200 300,400 T400,800" stroke="hsl(185,70%,50%)" strokeWidth="1.5" fill="none"/>
-          <path d="M300,0 Q500,200 400,400 T500,800" stroke="hsl(200,95%,55%)" strokeWidth="1" fill="none"/>
-          <circle cx="250" cy="200" r="30" stroke="hsl(200,95%,55%)" strokeWidth="1" fill="none" opacity="0.5"/>
-          <circle cx="350" cy="400" r="25" stroke="hsl(185,70%,50%)" strokeWidth="1" fill="none" opacity="0.4"/>
-          <circle cx="200" cy="600" r="20" stroke="hsl(200,95%,55%)" strokeWidth="1" fill="none" opacity="0.3"/>
-        </svg>
-        {/* Floating DevOps icons */}
-        <div className="absolute right-[15%] top-[20%] text-primary/[0.06]">
-          <GitBranch className="h-16 w-16" />
-        </div>
-        <div className="absolute right-[25%] top-[45%] text-accent/[0.06]">
-          <Box className="h-12 w-12" />
-        </div>
-        <div className="absolute right-[10%] top-[60%] text-primary/[0.05]">
-          <Ship className="h-14 w-14" />
-        </div>
-        <div className="absolute right-[30%] top-[70%] text-accent/[0.04]">
-          <Cloud className="h-10 w-10" />
-        </div>
-        <div className="absolute right-[18%] top-[35%] text-primary/[0.04]">
-          <Shield className="h-10 w-10" />
-        </div>
-      </div>
+    <section id="home" className="relative flex min-h-[85vh] items-center px-6 pt-14">
+      {/* Subtle grid pattern */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
 
       <div className="relative z-10 mx-auto w-full max-w-3xl">
-        <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase text-primary">
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase text-primary"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           DevOps Engineer
-        </p>
+        </motion.p>
 
-        <h1 className="mb-4 text-4xl font-bold leading-[1.15] tracking-tight sm:text-5xl lg:text-6xl">
-          I build
-        </h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-5 text-3xl font-bold leading-[1.2] tracking-tight sm:text-4xl lg:text-5xl"
+        >
+          CI/CD <span className="text-muted-foreground font-normal">•</span> Docker{' '}
+          <span className="text-muted-foreground font-normal">•</span> Kubernetes{' '}
+          <span className="text-muted-foreground font-normal">•</span>{' '}
+          <span className="text-gradient">Cloud</span>
+        </motion.h1>
 
-        <div className="mb-6 flex flex-wrap gap-2">
-          {['CI/CD Pipelines', 'Kubernetes Clusters', 'Cloud Infrastructure'].map((skill) => (
-            <span
-              key={skill}
-              className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary sm:text-base"
-            >
-              [{skill}]
-            </span>
-          ))}
-        </div>
-
-        <p className="mb-8 max-w-xl text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="mb-8 max-w-xl text-[15px] leading-[1.8] text-muted-foreground"
+        >
           Fresh graduate DevOps Engineer with hands-on internship experience in Jenkins pipelines,
           Docker containerization, Kubernetes deployments, and GitOps using Argo CD.
-        </p>
+        </motion.p>
 
-        <div className="mb-10 flex flex-wrap items-center gap-3">
-          <Button size="lg" className="rounded-xl shadow-md shadow-primary/20 font-medium" asChild>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mb-10 flex flex-wrap items-center gap-3"
+        >
+          <Button size="lg" className="rounded-xl font-medium" asChild>
             <a href="#projects">
               <ArrowDown className="mr-2 h-4 w-4" /> View Projects
             </a>
@@ -72,30 +65,43 @@ export function HeroSection() {
               <Mail className="mr-2 h-4 w-4" /> Contact Me
             </a>
           </Button>
-        </div>
+        </motion.div>
 
-        {/* Tech badges */}
-        <div className="flex flex-wrap items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.65 }}
+          className="flex flex-wrap items-center gap-2"
+        >
           {badges.map((b, i) => (
-            <Badge
+            <motion.div
               key={b}
-              variant="secondary"
-              className="px-3 py-1 text-xs font-mono rounded-full border-0 animate-fade-in"
-              style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.7 + i * 0.06 }}
             >
-              {b}
-            </Badge>
+              <Badge
+                variant="secondary"
+                className="px-3 py-1 text-xs font-mono rounded-full border-0"
+              >
+                {b}
+              </Badge>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Status indicator */}
-        <div className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
+          className="mt-8 inline-flex items-center gap-2 text-xs text-muted-foreground"
+        >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
           </span>
-          System Status: Operational
-        </div>
+          Available for opportunities
+        </motion.div>
       </div>
     </section>
   );
