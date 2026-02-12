@@ -1,4 +1,5 @@
 import { ExternalLink, Github } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
@@ -23,24 +24,48 @@ const projects = [
   },
 ];
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
 export function ProjectsSection() {
   return (
-    <section id="projects" className="py-24 px-5 sm:px-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="animate-on-scroll mb-14 text-center">
+    <section id="projects" className="py-24 px-6">
+      <div className="mx-auto max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5 }}
+          className="mb-14 text-center"
+        >
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Projects</p>
           <h2 className="text-2xl font-semibold sm:text-3xl">Featured Work</h2>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-40px' }}
+          className="grid gap-5 md:grid-cols-3"
+        >
           {projects.map((p) => (
-            <div
+            <motion.div
               key={p.title}
-              className="animate-on-scroll group flex flex-col rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
+              variants={item}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="group flex flex-col rounded-2xl border border-border/50 bg-card p-6 transition-shadow duration-300 hover:shadow-lg hover:shadow-primary/5"
             >
               <h3 className="text-[15px] font-semibold leading-snug mb-3">{p.title}</h3>
               <p className="mb-5 text-[13px] leading-relaxed text-muted-foreground flex-1">{p.description}</p>
-              
+
               <div className="mb-5">
                 <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground/60 mb-2">Tech Used</p>
                 <div className="flex flex-wrap gap-1.5">
@@ -60,9 +85,9 @@ export function ProjectsSection() {
                   <ExternalLink className="h-3.5 w-3.5" /> Case Study
                 </Button>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
