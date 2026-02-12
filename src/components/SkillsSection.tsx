@@ -19,12 +19,12 @@ const skills = [
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.06 } },
+  show: { transition: { staggerChildren: 0.07 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
 export function SkillsSection() {
@@ -40,6 +40,13 @@ export function SkillsSection() {
         >
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Skills</p>
           <h2 className="text-2xl font-semibold sm:text-3xl">Technical Expertise</h2>
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: 48 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mx-auto mt-4 h-0.5 rounded-full bg-primary/40"
+          />
         </motion.div>
 
         <motion.div
@@ -53,20 +60,24 @@ export function SkillsSection() {
             <motion.div
               key={s.title}
               variants={item}
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="group rounded-2xl border border-border/50 bg-card p-5 transition-shadow duration-300 hover:shadow-md hover:shadow-primary/5"
+              whileHover={{ y: -4, boxShadow: '0 12px 30px -8px hsl(var(--primary) / 0.1)', transition: { duration: 0.2 } }}
+              className="group rounded-2xl border border-border/50 bg-card p-5 transition-colors duration-300"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <motion.div
+                  whileHover={{ rotate: 10, scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary"
+                >
                   <s.icon className="h-4 w-4" />
-                </div>
+                </motion.div>
                 <h3 className="text-sm font-semibold">{s.title}</h3>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {s.items.map((it) => (
                   <span
                     key={it}
-                    className="rounded-lg bg-muted px-2.5 py-1 text-[11px] text-muted-foreground font-mono"
+                    className="rounded-lg bg-muted px-2.5 py-1 text-[11px] text-muted-foreground font-mono transition-colors duration-200 hover:bg-primary/10 hover:text-primary"
                   >
                     {it}
                   </span>

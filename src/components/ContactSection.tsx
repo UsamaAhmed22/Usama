@@ -60,6 +60,13 @@ export function ContactSection() {
         >
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">Contact</p>
           <h2 className="text-2xl font-semibold sm:text-3xl">Get In Touch</h2>
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: 48 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mx-auto mt-4 h-0.5 rounded-full bg-primary/40"
+          />
         </motion.div>
 
         <div className="grid gap-8 md:grid-cols-2">
@@ -73,15 +80,19 @@ export function ContactSection() {
             {contactItems.map((ci, i) => (
               <motion.div
                 key={ci.label}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.15 + i * 0.08 }}
+                transition={{ duration: 0.35, delay: 0.15 + i * 0.08 }}
+                whileHover={{ x: 4, transition: { duration: 0.15 } }}
                 className="flex items-center gap-3"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <motion.div
+                  whileHover={{ rotate: 8, scale: 1.05 }}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"
+                >
                   <ci.icon className="h-4 w-4" />
-                </div>
+                </motion.div>
                 <div>
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{ci.label}</p>
                   {ci.href ? (
@@ -109,20 +120,22 @@ export function ContactSection() {
             className="rounded-2xl border border-border/50 bg-card p-6"
           >
             <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                placeholder="Your Name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                maxLength={100}
-                className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40"
-              />
+              <motion.div whileFocus={{ scale: 1.01 }}>
+                <Input
+                  placeholder="Your Name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  maxLength={100}
+                  className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40 transition-all duration-200"
+                />
+              </motion.div>
               <Input
                 type="email"
                 placeholder="Your Email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 maxLength={255}
-                className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40"
+                className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40 transition-all duration-200"
               />
               <Textarea
                 placeholder="Your Message"
@@ -130,11 +143,13 @@ export function ContactSection() {
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 maxLength={1000}
-                className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40 resize-none"
+                className="rounded-xl bg-muted/40 border-border/40 focus:border-primary/40 resize-none transition-all duration-200"
               />
-              <Button type="submit" className="w-full gap-2 rounded-xl font-medium">
-                <Send className="h-4 w-4" /> Send Message
-              </Button>
+              <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
+                <Button type="submit" className="w-full gap-2 rounded-xl font-medium">
+                  <Send className="h-4 w-4" /> Send Message
+                </Button>
+              </motion.div>
             </form>
           </motion.div>
         </div>
