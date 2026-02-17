@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ArrowDown, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import devopsPipeline from '@/assets/devops-pipeline.png';
 
 const badges = ['Jenkins', 'Docker', 'Kubernetes', 'GitOps', 'AWS', 'Azure', 'Linux', 'Argo CD'];
-
 const roles = ['CI/CD Pipelines', 'Docker Containers', 'Kubernetes Clusters', 'Cloud Infrastructure', 'GitOps Workflows'];
 
 function useTypingEffect(words: string[], typingSpeed = 80, deletingSpeed = 40, pauseTime = 2000) {
@@ -35,6 +33,83 @@ function useTypingEffect(words: string[], typingSpeed = 80, deletingSpeed = 40, 
   return text;
 }
 
+// Animated network/circuit visualization
+function NetworkVisualization() {
+  const nodes = useMemo(() => 
+    Array.from({ length: 35 }, (_, i) => ({
+      id: i,
+      x: 20 + Math.random() * 60,
+      y: 10 + Math.random() * 80,
+      size: 2 + Math.random() * 4,
+      delay: Math.random() * 3,
+      duration: 3 + Math.random() * 4,
+    })), []
+  );
+
+  const connections = useMemo(() => {
+    const conns: { x1: number; y1: number; x2: number; y2: number; delay: number }[] = [];
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+        if (dist < 18) {
+          conns.push({
+            x1: nodes[i].x, y1: nodes[i].y,
+            x2: nodes[j].x, y2: nodes[j].y,
+            delay: Math.random() * 2,
+          });
+        }
+      }
+    }
+    return conns;
+  }, [nodes]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+        {/* Connection lines */}
+        {connections.map((c, i) => (
+          <motion.line
+            key={`line-${i}`}
+            x1={`${c.x1}%`} y1={`${c.y1}%`}
+            x2={`${c.x2}%`} y2={`${c.y2}%`}
+            stroke="hsl(var(--primary))"
+            strokeWidth="0.15"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.3, 0.1, 0.3, 0] }}
+            transition={{ duration: 5, delay: c.delay, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+        {/* Nodes */}
+        {nodes.map((n) => (
+          <motion.circle
+            key={`node-${n.id}`}
+            cx={`${n.x}%`} cy={`${n.y}%`}
+            r={n.size * 0.15}
+            fill="hsl(var(--primary))"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0, 0.8, 0.3, 0.8, 0], scale: [0.5, 1, 0.8, 1, 0.5] }}
+            transition={{ duration: n.duration, delay: n.delay, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+        {/* Glowing accent nodes */}
+        {nodes.filter((_, i) => i % 5 === 0).map((n) => (
+          <motion.circle
+            key={`glow-${n.id}`}
+            cx={`${n.x}%`} cy={`${n.y}%`}
+            r={n.size * 0.4}
+            fill="none"
+            stroke="hsl(var(--accent))"
+            strokeWidth="0.1"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.5, 0], scale: [1, 1.8, 1] }}
+            transition={{ duration: 3, delay: n.delay + 0.5, repeat: Infinity }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 export function HeroSection() {
   const typedText = useTypingEffect(roles);
 
@@ -61,9 +136,14 @@ export function HeroSection() {
         className="pointer-events-none absolute bottom-20 left-[5%] h-[250px] w-[250px] rounded-full bg-accent/5 blur-[80px]"
       />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
-        {/* Left: Text content */}
-        <div>
+      {/* Network visualization on right side */}
+      <div className="absolute right-0 top-0 bottom-0 w-[55%] hidden lg:block">
+        <NetworkVisualization />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
+        {/* Text content - left aligned, full width on mobile */}
+        <div className="max-w-2xl">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,25 +247,6 @@ export function HeroSection() {
             Available for opportunities
           </motion.div>
         </div>
-
-        {/* Right: DevOps pipeline image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, x: 40 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-          className="hidden lg:block"
-        >
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <img
-              src={devopsPipeline}
-              alt="DevOps CI/CD Pipeline Architecture"
-              className="w-full max-w-[480px] mx-auto rounded-2xl opacity-90"
-            />
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );
