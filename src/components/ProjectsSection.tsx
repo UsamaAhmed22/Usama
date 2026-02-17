@@ -7,6 +7,8 @@ const projects = [
   {
     title: 'CI/CD and GitOps Pipeline on Azure',
     tools: ['Jenkins', 'Docker', 'DockerHub', 'ArgoCD', 'GitHub', 'SonarQube', 'Trivy', 'OWASP', 'K3s'],
+    repo: 'https://github.com/UsamaAhmed22/Project_For_Deployment.git',
+    caseStudy: '/Usama/case-studies/cicd-case-study.html',
     description:
       'Designed and deployed an end-to-end CI/CD pipeline on Azure VMs. Automated build, testing, Docker image creation, vulnerability scanning, dependency scanning, and code quality gates. Implemented GitOps deployments on K3s using Argo CD with automated sync and self-healing.',
     color: 'from-primary/10 to-accent/5',
@@ -14,6 +16,7 @@ const projects = [
   {
     title: 'Full-Stack App with Docker & Docker Compose',
     tools: ['Docker', 'Node.js', 'MongoDB', 'Nginx'],
+    repo: 'https://github.com/UsamaAhmed22/Fullstack-App-with-Docker.git',
     description:
       'Designed a multi-container full-stack web application using Docker. Orchestrated services using Docker Compose, reducing setup time by 70%. Configured Nginx reverse proxy for routing and load handling.',
     color: 'from-accent/10 to-primary/5',
@@ -96,20 +99,46 @@ export function ProjectsSection() {
                 </div>
 
                 <div className="flex gap-2 pt-1">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="gap-1.5 rounded-xl text-xs border-border/60 hover:border-primary/40 transition-colors"
-                  >
-                    <Github className="h-3.5 w-3.5" /> GitHub
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="gap-1.5 text-xs text-muted-foreground hover:text-primary"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" /> Case Study
-                  </Button>
+                  {p.repo ? (
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="gap-1.5 rounded-xl text-xs border-border/60 hover:border-primary/40 transition-colors"
+                    >
+                      <a href={p.repo} target="_blank" rel="noopener noreferrer">
+                        <Github className="h-3.5 w-3.5" /> GitHub
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1.5 rounded-xl text-xs border-border/60 hover:border-primary/40 transition-colors"
+                    >
+                      <Github className="h-3.5 w-3.5" /> GitHub
+                    </Button>
+                  )}
+                  {p.caseStudy ? (
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="ghost"
+                      className="gap-1.5 text-xs text-muted-foreground hover:text-primary"
+                    >
+                      <a href={p.caseStudy} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-3.5 w-3.5" /> Case Study
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="gap-1.5 text-xs text-muted-foreground hover:text-primary"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" /> Case Study
+                    </Button>
+                  )}
                 </div>
               </div>
             </motion.div>

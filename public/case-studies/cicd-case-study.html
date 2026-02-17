@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study — CI/CD & GitOps Pipeline on Azure</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --bg2: #0d1320;
+    --bg3: #111927;
+    --line: #1e2d42;
+    --accent: #00e5ff;
+    --accent2: #7b5ea7;
+    --green: #00ff9d;
+    --red: #ff4d6d;
+    --yellow: #ffd166;
+    --text: #e0eaf5;
+    --muted: #6b8299;
+    --card: #0f1c2e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    padding: 3rem 0 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-glow {
+    position: absolute;
+    top: -120px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--line);
+    margin-top: 2rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .meta-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ─── TECH BADGES ─── */
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--muted);
+    background: var(--bg2);
+    transition: all 0.2s;
+  }
+
+  .badge:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,229,255,0.05);
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 5rem 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  p {
+    color: #8ea9c0;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ─── PROBLEM SECTION ─── */
+  .pain-points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .pain-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--red);
+    padding: 1.2rem;
+    border-radius: 4px;
+  }
+
+  .pain-card .icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .pain-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .pain-card p {
+    font-size: 0.82rem;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  /* ─── ARCHITECTURE ─── */
+  .arch-diagram {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 600px;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+
+  .pipe-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pipe-box {
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    text-align: center;
+    min-width: 90px;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .pipe-box:hover {
+    border-color: var(--accent);
+    background: rgba(0,229,255,0.04);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,229,255,0.1);
+  }
+
+  .pipe-box .picon { font-size: 1.4rem; margin-bottom: 0.2rem; }
+  .pipe-box .plabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .pipe-box .pname {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .pipe-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0.3rem;
+  }
+
+  .arrow-line {
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--line), var(--accent));
+    position: relative;
+  }
+
+  .arrow-line::after {
+    content: '▶';
+    position: absolute;
+    right: -8px;
+    top: -7px;
+    font-size: 0.6rem;
+    color: var(--accent);
+  }
+
+  .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .stage-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .tag-ci { background: rgba(0,229,255,0.1); color: var(--accent); }
+  .tag-sec { background: rgba(255,77,109,0.1); color: var(--red); }
+  .tag-cd { background: rgba(0,255,157,0.1); color: var(--green); }
+
+  /* ─── PHASES ─── */
+  .phases {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .phase-card:hover { border-color: var(--accent); }
+
+  .phase-header {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .phase-title { font-weight: 700; font-size: 1rem; }
+
+  .phase-body {
+    padding: 0 1.5rem 1.5rem;
+    display: none;
+  }
+
+  .phase-body.open { display: block; }
+
+  .phase-body p { font-size: 0.9rem; }
+
+  .code-block {
+    background: #060c15;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #7ec8e3;
+    overflow-x: auto;
+    margin: 1rem 0;
+    line-height: 1.8;
+  }
+
+  .code-block .comment { color: #3a5068; }
+  .code-block .keyword { color: var(--accent); }
+  .code-block .string { color: var(--green); }
+  .code-block .var { color: var(--yellow); }
+
+  /* ─── CHALLENGES ─── */
+  .challenge-grid {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .challenge-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  @media (max-width: 600px) {
+    .challenge-item { grid-template-columns: 1fr; }
+  }
+
+  .ch-problem, .ch-solution {
+    padding: 1.2rem 1.5rem;
+    background: var(--card);
+  }
+
+  .ch-problem { border-left: 3px solid var(--red); }
+  .ch-solution { border-left: 3px solid var(--green); }
+
+  .ch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .ch-problem .ch-label { color: var(--red); }
+  .ch-solution .ch-label { color: var(--green); }
+
+  .ch-text { font-size: 0.88rem; color: #8ea9c0; line-height: 1.5; }
+
+  /* ─── METRICS ─── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .metric-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .metric-card:hover { transform: translateY(-4px); }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .metric-card.cyan::before { background: var(--accent); }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.yellow::before { background: var(--yellow); }
+  .metric-card.purple::before { background: var(--accent2); }
+
+  .metric-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .metric-card.cyan .metric-value { color: var(--accent); }
+  .metric-card.green .metric-value { color: var(--green); }
+  .metric-card.yellow .metric-value { color: var(--yellow); }
+  .metric-card.purple .metric-value { color: var(--accent2); }
+
+  .metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .metric-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* ─── LESSONS ─── */
+  .lessons-list {
+    margin-top: 2rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .lesson-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+
+  .lesson-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .lesson-text { font-size: 0.9rem; color: #8ea9c0; line-height: 1.6; }
+  .lesson-text strong { color: var(--text); display: block; margin-bottom: 0.2rem; font-size: 0.95rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 3rem 0;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #080c14;
+  }
+
+  .btn-primary:hover {
+    background: #33eaff;
+    box-shadow: 0 0 20px rgba(0,229,255,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ─── PROGRESS BAR SECTION ─── */
+  .tool-comparison {
+    margin-top: 2rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .tool-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tool-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .tool-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .tool-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    animation: growBar 1.2s ease-out forwards;
+    transform-origin: left;
+  }
+
+  @keyframes growBar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .tool-bar-fill.cyan { background: var(--accent); }
+  .tool-bar-fill.green { background: var(--green); }
+  .tool-bar-fill.yellow { background: var(--yellow); }
+  .tool-bar-fill.red { background: var(--red); }
+  .tool-bar-fill.purple { background: var(--accent2); }
+
+  .tool-purpose {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    width: 180px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,12,20,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0.8rem 0;
+  }
+
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* quote block */
+  .highlight-box {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    background: rgba(0,229,255,0.03);
+    border-radius: 0 4px 4px 0;
+    margin: 1.5rem 0;
+  }
+
+  .highlight-box p {
+    font-size: 1rem;
+    color: var(--text);
+    font-style: italic;
+    margin: 0;
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">// case-study</span>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#implementation">Implementation</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header>
+  <div class="header-glow"></div>
+  <div class="container">
+    <div class="eyebrow">DevOps &nbsp;·&nbsp; Cloud &nbsp;·&nbsp; Azure</div>
+    <h1>CI/CD & GitOps Pipeline<br><span>on Azure</span></h1>
+    <p style="color:#8ea9c0; max-width:600px; font-size:1.05rem;">
+      An end-to-end automated pipeline from code commit to production deployment — with security, quality gates, and self-healing infrastructure built in.
+    </p>
+
+    <div class="tech-stack">
+      <span class="badge">Jenkins</span>
+      <span class="badge">Docker</span>
+      <span class="badge">DockerHub</span>
+      <span class="badge">ArgoCD</span>
+      <span class="badge">GitHub</span>
+      <span class="badge">SonarQube</span>
+      <span class="badge">Trivy</span>
+      <span class="badge">OWASP</span>
+      <span class="badge">K3s</span>
+      <span class="badge">Azure VMs</span>
+    </div>
+
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Type</span>
+        <span class="meta-value">End-to-End DevOps Project</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Infrastructure</span>
+        <span class="meta-value">Azure Cloud</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Deployment Model</span>
+        <span class="meta-value">GitOps on K3s</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Security Level</span>
+        <span class="meta-value">Shift-Left DevSecOps</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── PROBLEM ─── -->
+<section id="problem">
+  <div class="container fade-up">
+    <div class="section-number">01 / Problem Statement</div>
+    <h2>Why This Pipeline<br>Needed to Exist</h2>
+    <p>
+      Modern software teams face a painful gap between development velocity and deployment confidence. Without proper automation, every release is a manual, error-prone event — and security is an afterthought discovered after deployment.
+    </p>
+
+    <div class="highlight-box">
+      <p>"The goal was to eliminate human error from deployments entirely — while catching security vulnerabilities before they ever reached production."</p>
+    </div>
+
+    <div class="pain-points">
+      <div class="pain-card fade-up">
+        <div class="icon">⚡</div>
+        <h4>Manual Deployments</h4>
+        <p>Each deployment required manual SSH into servers, running scripts by hand — slow, inconsistent, and risky.</p>
+      </div>
+      <div class="pain-card fade-up">
+        <div class="icon">🔓</div>
+        <h4>No Security Scanning</h4>
+        <p>Docker images and dependencies were deployed without vulnerability checks, creating blind spots in production.</p>
+      </div>
+      <div class="pain-card fade-up">
+        <div class="icon">📉</div>
+        <h4>No Code Quality Gates</h4>
+        <p>Code was merged and deployed without static analysis, allowing technical debt and bugs to accumulate undetected.</p>
+      </div>
+      <div class="pain-card fade-up">
+        <div class="icon">🔄</div>
+        <h4>No Self-Healing</h4>
+        <p>If a deployment drifted from the desired state, there was no automated mechanism to detect or correct it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ARCHITECTURE ─── -->
+<section id="architecture">
+  <div class="container fade-up">
+    <div class="section-number">02 / Architecture</div>
+    <h2>How Everything<br>Connects</h2>
+    <p>The pipeline is split into two distinct systems — a <strong style="color:var(--accent)">CI pipeline</strong> powered by Jenkins, and a <strong style="color:var(--green)">CD system</strong> driven by ArgoCD's GitOps model. They communicate through a Git repository acting as the single source of truth.</p>
+
+    <div class="arch-diagram fade-up">
+      <div style="text-align:center; font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--muted); margin-bottom:1.5rem; text-transform:uppercase; letter-spacing:0.15em;">Pipeline Flow</div>
+      <div class="pipeline">
+        <div class="pipe-stage">
+          <span class="stage-tag tag-ci">trigger</span>
+          <div class="pipe-box">
+            <div class="picon">📂</div>
+            <div class="plabel">Source</div>
+            <div class="pname">GitHub</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">push</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-ci">CI</span>
+          <div class="pipe-box">
+            <div class="picon">⚙️</div>
+            <div class="plabel">Build</div>
+            <div class="pname">Jenkins</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">scan</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-sec">security</span>
+          <div class="pipe-box">
+            <div class="picon">🛡️</div>
+            <div class="plabel">Secure</div>
+            <div class="pname">Trivy+OWASP</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">gate</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-sec">quality</span>
+          <div class="pipe-box">
+            <div class="picon">🔬</div>
+            <div class="plabel">Quality</div>
+            <div class="pname">SonarQube</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">push</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-ci">registry</span>
+          <div class="pipe-box">
+            <div class="picon">📦</div>
+            <div class="plabel">Registry</div>
+            <div class="pname">DockerHub</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">sync</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-cd">GitOps</span>
+          <div class="pipe-box">
+            <div class="picon">🔁</div>
+            <div class="plabel">Deploy</div>
+            <div class="pname">ArgoCD</div>
+          </div>
+        </div>
+        <div class="pipe-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">apply</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="stage-tag tag-cd">runtime</span>
+          <div class="pipe-box">
+            <div class="picon">☸️</div>
+            <div class="plabel">Cluster</div>
+            <div class="pname">K3s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem;">Tool Roles</h3>
+    <div class="tool-comparison fade-up">
+      <div class="tool-row">
+        <span class="tool-name">Jenkins</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill cyan" style="width:95%"></div></div>
+        <span class="tool-purpose">Pipeline orchestration & automation</span>
+      </div>
+      <div class="tool-row">
+        <span class="tool-name">Trivy</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill red" style="width:80%"></div></div>
+        <span class="tool-purpose">Container image vulnerability scan</span>
+      </div>
+      <div class="tool-row">
+        <span class="tool-name">OWASP</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill red" style="width:75%"></div></div>
+        <span class="tool-purpose">Dependency vulnerability scan</span>
+      </div>
+      <div class="tool-row">
+        <span class="tool-name">SonarQube</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill yellow" style="width:85%"></div></div>
+        <span class="tool-purpose">Static code analysis & quality gate</span>
+      </div>
+      <div class="tool-row">
+        <span class="tool-name">ArgoCD</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill green" style="width:90%"></div></div>
+        <span class="tool-purpose">GitOps continuous delivery & sync</span>
+      </div>
+      <div class="tool-row">
+        <span class="tool-name">K3s</span>
+        <div class="tool-bar-bg"><div class="tool-bar-fill purple" style="width:70%"></div></div>
+        <span class="tool-purpose">Lightweight Kubernetes runtime</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── IMPLEMENTATION ─── -->
+<section id="implementation">
+  <div class="container fade-up">
+    <div class="section-number">03 / Implementation</div>
+    <h2>Building It Phase<br>by Phase</h2>
+    <p>Click each phase to expand the implementation details.</p>
+
+    <div class="phases">
+
+      <div class="phase-card fade-up">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">1</span>
+          <span class="phase-title">Azure VM Setup & Jenkins Configuration</span>
+          <span style="margin-left:auto; color:var(--muted); font-size:1.2rem;">+</span>
+        </div>
+        <div class="phase-body">
+          <p>Two Azure VMs were provisioned — one as the Jenkins master (build server) and one as the K3s node (deployment target). Jenkins was installed and configured with the required plugins: Docker Pipeline, SonarQube Scanner, OWASP Dependency-Check, Kubernetes CD, and GitHub integration.</p>
+          <div class="code-block">
+<span class="comment"># Azure VM provisioning (simplified)</span>
+az vm create \
+  --resource-group devops-rg \
+  --name jenkins-server \
+  --image Ubuntu2204 \
+  --size Standard_B2s \
+  --admin-username azureuser \
+  --generate-ssh-keys
+
+<span class="comment"># Install Jenkins on Ubuntu</span>
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+apt-get install -y jenkins
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card fade-up">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">2</span>
+          <span class="phase-title">Jenkinsfile Pipeline — CI Stages</span>
+          <span style="margin-left:auto; color:var(--muted); font-size:1.2rem;">+</span>
+        </div>
+        <div class="phase-body">
+          <p>The Jenkinsfile defines the complete CI pipeline as code, committed to the repository alongside application code. Each stage is a discrete, auditable step.</p>
+          <div class="code-block">
+<span class="keyword">pipeline</span> {
+  <span class="keyword">agent</span> any
+  <span class="keyword">stages</span> {
+    <span class="keyword">stage</span>(<span class="string">'Checkout'</span>) {
+      <span class="keyword">steps</span> { git <span class="string">'https://github.com/user/app'</span> }
+    }
+    <span class="keyword">stage</span>(<span class="string">'Build & Test'</span>) {
+      <span class="keyword">steps</span> { sh <span class="string">'mvn clean package'</span> }
+    }
+    <span class="keyword">stage</span>(<span class="string">'SonarQube Analysis'</span>) {
+      <span class="keyword">steps</span> {
+        withSonarQubeEnv(<span class="string">'sonar-server'</span>) {
+          sh <span class="string">'mvn sonar:sonar'</span>
+        }
+      }
+    }
+    <span class="keyword">stage</span>(<span class="string">'Quality Gate'</span>) {
+      <span class="keyword">steps</span> {
+        waitForQualityGate abortPipeline: <span class="var">true</span>
+      }
+    }
+    <span class="keyword">stage</span>(<span class="string">'Docker Build & Push'</span>) {
+      <span class="keyword">steps</span> {
+        sh <span class="string">'docker build -t user/app:${BUILD_NUMBER} .'</span>
+        sh <span class="string">'docker push user/app:${BUILD_NUMBER}'</span>
+      }
+    }
+  }
+}
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card fade-up">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">3</span>
+          <span class="phase-title">Security Integration — Trivy & OWASP</span>
+          <span style="margin-left:auto; color:var(--muted); font-size:1.2rem;">+</span>
+        </div>
+        <div class="phase-body">
+          <p>Security scanning was embedded directly into the pipeline as non-negotiable gates. Trivy scans the built Docker image for OS and library CVEs. OWASP Dependency-Check scans project dependencies for known vulnerabilities. Both must pass before the image is pushed.</p>
+          <div class="code-block">
+<span class="keyword">stage</span>(<span class="string">'Trivy Image Scan'</span>) {
+  <span class="keyword">steps</span> {
+    sh <span class="string">"""
+      trivy image \
+        --exit-code 1 \
+        --severity HIGH,CRITICAL \
+        --format table \
+        user/app:${BUILD_NUMBER}
+    """</span>
+  }
+}
+
+<span class="keyword">stage</span>(<span class="string">'OWASP Dependency Check'</span>) {
+  <span class="keyword">steps</span> {
+    dependencyCheck additionalArguments: <span class="string">'--scan ./'</span>,
+      odcInstallation: <span class="string">'OWASP-DC'</span>
+    dependencyCheckPublisher pattern: <span class="string">'**/dependency-check-report.xml'</span>
+  }
+}
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card fade-up">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">4</span>
+          <span class="phase-title">GitOps Deployment with ArgoCD on K3s</span>
+          <span style="margin-left:auto; color:var(--muted); font-size:1.2rem;">+</span>
+        </div>
+        <div class="phase-body">
+          <p>ArgoCD was installed on the K3s cluster and connected to the Git repository containing Kubernetes manifests. Once Jenkins updates the manifest with the new image tag and pushes to Git, ArgoCD automatically detects the change and syncs the cluster. If the live state ever drifts from the Git-declared state, ArgoCD self-heals it automatically.</p>
+          <div class="code-block">
+<span class="comment"># ArgoCD Application manifest</span>
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: <span class="string">my-app</span>
+  namespace: <span class="string">argocd</span>
+spec:
+  project: <span class="string">default</span>
+  source:
+    repoURL: <span class="string">https://github.com/user/k8s-manifests</span>
+    targetRevision: <span class="string">HEAD</span>
+    path: <span class="string">manifests/</span>
+  destination:
+    server: <span class="string">https://kubernetes.default.svc</span>
+    namespace: <span class="string">production</span>
+  syncPolicy:
+    automated:
+      prune: <span class="var">true</span>
+      selfHeal: <span class="var">true</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── CHALLENGES ─── -->
+<section id="challenges">
+  <div class="container fade-up">
+    <div class="section-number">04 / Challenges</div>
+    <h2>Problems Encountered<br>& How I Solved Them</h2>
+
+    <div class="challenge-grid">
+
+      <div class="challenge-item fade-up">
+        <div class="ch-problem">
+          <div class="ch-label">🔴 Problem</div>
+          <div class="ch-text">Trivy flagged HIGH vulnerabilities from base OS packages that were irrelevant to the running application, causing false positive pipeline failures.</div>
+        </div>
+        <div class="ch-solution">
+          <div class="ch-label">🟢 Solution</div>
+          <div class="ch-text">Created a <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent);">.trivyignore</code> file to suppress known false positives, and switched to a <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent);">distroless</code> base image to eliminate OS-layer CVEs entirely.</div>
+        </div>
+      </div>
+
+      <div class="challenge-item fade-up">
+        <div class="ch-problem">
+          <div class="ch-label">🔴 Problem</div>
+          <div class="ch-text">ArgoCD sync was stuck in a degraded state after a bad deployment. Rolling back was not straightforward without understanding how Git-driven rollback works.</div>
+        </div>
+        <div class="ch-solution">
+          <div class="ch-label">🟢 Solution</div>
+          <div class="ch-text">Learned that rollback in GitOps means reverting the Git commit. Used <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent);">git revert</code> on the manifest repo, pushed, and ArgoCD self-healed back to the previous healthy state automatically.</div>
+        </div>
+      </div>
+
+      <div class="challenge-item fade-up">
+        <div class="ch-problem">
+          <div class="ch-label">🔴 Problem</div>
+          <div class="ch-text">SonarQube Quality Gate was failing due to insufficient code coverage, blocking every build even during early development.</div>
+        </div>
+        <div class="ch-solution">
+          <div class="ch-label">🟢 Solution</div>
+          <div class="ch-text">Created a project-specific Quality Gate profile in SonarQube with adjusted coverage thresholds for the project's maturity stage, while progressively increasing them over time.</div>
+        </div>
+      </div>
+
+      <div class="challenge-item fade-up">
+        <div class="ch-problem">
+          <div class="ch-label">🔴 Problem</div>
+          <div class="ch-text">Jenkins and DockerHub credentials were being hardcoded in pipeline scripts, creating a serious security risk in the repository.</div>
+        </div>
+        <div class="ch-solution">
+          <div class="ch-label">🟢 Solution</div>
+          <div class="ch-text">Migrated all credentials to Jenkins Credentials Manager and referenced them via <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent);">withCredentials()</code> blocks, ensuring secrets never appear in logs or source code.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESULTS ─── -->
+<section id="results">
+  <div class="container fade-up">
+    <div class="section-number">05 / Results & Metrics</div>
+    <h2>What the Pipeline<br>Actually Achieved</h2>
+
+    <div class="metrics-grid">
+      <div class="metric-card cyan fade-up">
+        <div class="metric-value">~0</div>
+        <div class="metric-label">Manual Steps</div>
+        <div class="metric-sub">per deployment after pipeline</div>
+      </div>
+      <div class="metric-card green fade-up">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Image Scan Coverage</div>
+        <div class="metric-sub">every build is scanned</div>
+      </div>
+      <div class="metric-card yellow fade-up">
+        <div class="metric-value">&lt;5m</div>
+        <div class="metric-label">Deploy Time</div>
+        <div class="metric-sub">commit to live via ArgoCD sync</div>
+      </div>
+      <div class="metric-card purple fade-up">
+        <div class="metric-value">Auto</div>
+        <div class="metric-label">Self-Healing</div>
+        <div class="metric-sub">drift detection + correction</div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:2.5rem;">
+      <p>Every code push now automatically triggers build → test → security scan → quality gate → containerize → push → deploy → verify. Zero human intervention required in the happy path.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LESSONS ─── -->
+<section id="lessons">
+  <div class="container fade-up">
+    <div class="section-number">06 / Lessons Learned</div>
+    <h2>What I'd Do<br>Differently</h2>
+
+    <div class="lessons-list">
+      <div class="lesson-item fade-up">
+        <span class="lesson-icon">📊</span>
+        <div class="lesson-text">
+          <strong>Add Observability from Day One</strong>
+          The pipeline lacks Prometheus + Grafana monitoring on the K3s cluster. Next iteration would instrument the app and cluster from the start, so you can see the impact of deployments in real-time.
+        </div>
+      </div>
+      <div class="lesson-item fade-up">
+        <span class="lesson-icon">🌐</span>
+        <div class="lesson-text">
+          <strong>Multi-Environment Strategy</strong>
+          The current setup deploys to a single environment. A proper setup would have separate dev, staging, and production namespaces — each with their own ArgoCD Application and promotion gates between them.
+        </div>
+      </div>
+      <div class="lesson-item fade-up">
+        <span class="lesson-icon">🔔</span>
+        <div class="lesson-text">
+          <strong>Pipeline Failure Notifications</strong>
+          There are no Slack or email alerts when the pipeline fails at a security or quality gate. Adding webhook-based notifications would close the feedback loop much faster.
+        </div>
+      </div>
+      <div class="lesson-item fade-up">
+        <span class="lesson-icon">🏗️</span>
+        <div class="lesson-text">
+          <strong>Infrastructure as Code</strong>
+          The Azure VMs were provisioned manually via the CLI. Using Terraform to declare the infrastructure would make the entire setup reproducible in minutes.
+        </div>
+      </div>
+      <div class="lesson-item fade-up">
+        <span class="lesson-icon">🔑</span>
+        <div class="lesson-text">
+          <strong>Secrets Management</strong>
+          Jenkins Credentials work, but a dedicated secrets manager like HashiCorp Vault or Azure Key Vault would be the production-grade approach — especially for rotating credentials automatically.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); margin-bottom:1.5rem; text-transform:uppercase; letter-spacing:0.15em;">View the project</div>
+    <div class="footer-links">
+      <a href="#" class="btn btn-primary">⎇ GitHub Repository</a>
+      <a href="#" class="btn btn-secondary">↩ Back to Portfolio</a>
+    </div>
+    <p style="margin-top:2rem; font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--muted);">CI/CD & GitOps Pipeline on Azure — Case Study</p>
+  </div>
+</footer>
+
+<script>
+  // Toggle phases
+  function togglePhase(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('span:last-child');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open');
+    icon.textContent = isOpen ? '+' : '−';
+  }
+
+  // Open first phase by default
+  document.querySelector('.phase-header').click();
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
