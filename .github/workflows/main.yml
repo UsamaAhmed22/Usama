@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Vite site to GitHub Pages
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
         run: npm ci
       
       - name: Build
-        run: npm run build
+        run: npm run build   # make sure vite.config.ts has base: './'
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -39,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: ./dist   # deploy the built folder
 
   deploy:
     environment:
