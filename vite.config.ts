@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: './', // relative paths for GitHub Pages
+  base: '/', // relative paths for GitHub Pages
 
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
 
