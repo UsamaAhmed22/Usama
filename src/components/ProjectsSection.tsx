@@ -8,7 +8,7 @@ const projects = [
     title: 'CI/CD and GitOps Pipeline on Azure',
     tools: ['Jenkins', 'Docker', 'DockerHub', 'ArgoCD', 'GitHub', 'SonarQube', 'Trivy', 'OWASP', 'K3s'],
     repo: 'https://github.com/UsamaAhmed22/Project_For_Deployment.git',
-    caseStudy: '/Usama/case-studies/cicd-case-study.html',
+  caseStudy: '/case-studies/cicd-case-study.html',
     description:
       'Designed and deployed an end-to-end CI/CD pipeline on Azure VMs. Automated build, testing, Docker image creation, vulnerability scanning, dependency scanning, and code quality gates. Implemented GitOps deployments on K3s using Argo CD with automated sync and self-healing.',
     color: 'from-primary/10 to-accent/5',

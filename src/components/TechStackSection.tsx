@@ -14,6 +14,7 @@ const stack = [
   { icon: Shield, label: 'Trivy' },
   { icon: CheckCircle, label: 'SonarQube' },
   { icon: Terminal, label: 'Linux' },
+  { icon: Wrench, label: 'Ansible' },
   { icon: FileCode, label: 'Bash' },
   { icon: Wrench, label: 'Git' },
   { icon: Shield, label: 'OWASP' },

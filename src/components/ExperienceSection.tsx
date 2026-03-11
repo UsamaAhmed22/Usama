@@ -2,10 +2,12 @@ import { Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const responsibilities = [
-  'Assisted in building and maintaining CI/CD pipelines using Jenkins',
-  'Containerized applications using Docker for consistent environments',
-  'Supported Kubernetes deployments by updating manifests and monitoring pods',
-  'Worked in Linux-based environments with cloud-native DevOps practices',
+  'Designed and maintained CI/CD pipelines in Jenkins to automate build, test, and deployment stages with improved release consistency.',
+  'Implemented GitOps delivery workflows with Argo CD, enabling automated synchronization, drift detection, and self-healing deployments on Kubernetes.',
+  'Developed and maintained Ansible playbooks and roles to standardize server provisioning, configuration management, and repeatable environment setup.',
+  'Containerized and optimized applications using Docker, reducing environment-related issues and streamlining handoff between development and operations teams.',
+  'Supported Kubernetes operations by updating manifests, validating rollout health, and troubleshooting pod/service-level issues in Linux-based environments.',
+  'Collaborated with cross-functional teams to improve deployment reliability, document operational runbooks, and adopt DevOps best practices.',
 ];
 
 export function ExperienceSection() {

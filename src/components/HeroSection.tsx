@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
-const badges = ['Jenkins', 'Docker', 'Kubernetes', 'GitOps', 'AWS', 'Azure', 'Linux', 'Argo CD'];
+const badges = ['Jenkins', 'Docker', 'Kubernetes', 'GitOps', 'AWS', 'Azure', 'Linux', 'Argo CD', 'Ansible'];
 const roles = ['CI/CD Pipelines', 'Docker Containers', 'Kubernetes Clusters', 'Cloud Infrastructure', 'GitOps Workflows'];
 
 function useTypingEffect(words: string[], typingSpeed = 80, deletingSpeed = 40, pauseTime = 2000) {
