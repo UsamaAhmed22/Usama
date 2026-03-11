@@ -62,7 +62,7 @@ export function ExperienceSection() {
           <div className="rounded-2xl border border-border/50 bg-card p-6 sm:p-8">
             <h3 className="text-lg font-semibold">DevOps Intern</h3>
             <p className="mb-1 text-sm font-medium text-primary">Beenco Lab — Karachi</p>
-            <p className="mb-5 text-xs text-muted-foreground">Dec 2025 – Present</p>
+            <p className="mb-5 text-xs text-muted-foreground">Jan 2026 – Present</p>
 
             <ul className="space-y-3">
               {responsibilities.map((r, i) => (
